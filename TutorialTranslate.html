@@ -1,0 +1,155 @@
+composer create-project --prefer-dist laravel/laravel myproject
+cd myproject
+
+composer require google/cloud-translate
+
+Langkah 2: Konfigurasi Google Cloud
+Dapatkan Kredensial Google Cloud:
+
+Masuk ke Google Cloud Console.
+Buat proyek baru atau pilih proyek yang ada.
+Aktifkan Google Cloud Translation API di bagian API & Services.
+Buat kunci API atau file kredensial JSON dan unduh file tersebut.
+Konfigurasi Kredensial di Laravel:
+
+Simpan file kredensial JSON ke direktori proyek Anda, misalnya di storage/app/credentials/.
+
+Tambahkan variabel lingkungan ke file .env Anda:
+
+GOOGLE_APPLICATION_CREDENTIALS=storage/app/credentials/your-credentials-file.json
+
+Langkah 3: Buat Service Provider untuk Google Translate
+Buat Service Provider:
+Jalankan perintah berikut untuk membuat service provider baru:
+
+php artisan make:provider GoogleTranslateServiceProvider
+Tambahkan Kode untuk Service Provider:
+Edit app/Providers/GoogleTranslateServiceProvider.php untuk menginisialisasi klien Google Translate:
+
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Google\Cloud\Translate\V2\TranslateClient;
+
+class GoogleTranslateServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->singleton(TranslateClient::class, function ($app) {
+            return new TranslateClient([
+                'keyFilePath' => env('GOOGLE_APPLICATION_CREDENTIALS'),
+            ]);
+        });
+    }
+
+    public function boot()
+    {
+        //
+    }
+}
+
+
+Daftarkan Service Provider:
+Tambahkan provider ke array providers di file config/app.php:
+
+'providers' => [
+    // ...
+    App\Providers\GoogleTranslateServiceProvider::class,
+],
+
+Buat controller ::
+
+php artisan make:controller TranslationController
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Google\Cloud\Translate\V2\TranslateClient;
+
+class TranslationController extends Controller
+{
+    protected $translate;
+
+    public function __construct(TranslateClient $translate)
+    {
+        $this->translate = $translate;
+    }
+
+    public function showForm()
+    {
+        return view('translate');
+    }
+
+    public function translate(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|string',
+            'language' => 'required|string|size:2', // Ensure language code is two characters
+        ]);
+
+        $text = $request->input('text');
+        $targetLanguage = $request->input('language');
+
+        $translation = $this->translate->translate($text, [
+            'target' => $targetLanguage,
+        ]);
+
+        return view('translate', [
+            'original' => $text,
+            'translation' => $translation['text']
+        ]);
+    }
+}
+
+
+
+Buat View tranlsate.blade.php ::
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation</title>
+</head>
+<body>
+    <h1>Translate Text</h1>
+    <form action="{{ route('translate') }}" method="POST">
+        @csrf
+        <label for="text">Text to Translate:</label>
+        <textarea id="text" name="text" rows="4" cols="50">{{ old('text') }}</textarea>
+        <br><br>
+
+        <label for="language">Select Target Language:</label>
+        <select id="language" name="language">
+            <option value="ja" {{ old('language') == 'ja' ? 'selected' : '' }}>Japanese</option>
+            <option value="fr" {{ old('language') == 'fr' ? 'selected' : '' }}>French</option>
+            <option value="es" {{ old('language') == 'es' ? 'selected' : '' }}>Spanish</option>
+            <!-- Add more languages as needed -->
+        </select>
+        <br><br>
+
+        <button type="submit">Translate</button>
+    </form>
+
+    @if (isset($translation))
+        <h2>Translation Result:</h2>
+        <p><strong>Original:</strong> {{ $original }}</p>
+        <p><strong>Translated:</strong> {{ $translation }}</p>
+    @endif
+</body>
+</html>
+
+Update routes ::
+
+use App\Http\Controllers\TranslationController;
+
+// Route untuk menampilkan formulir
+Route::get('/translate', [TranslationController::class, 'showForm'])->name('showForm');
+
+// Route untuk menangani terjemahan
+Route::post('/translate', [TranslationController::class, 'translate'])->name('translate');
