@@ -14,7 +14,7 @@
                             <h1 class="hero-title ms-3 mb-0">Hello friends!</h1>
                         </div>
 
-                        <h2 class="mb-4">Selamat Datang di Portofolio Saya.</h2>
+                        <h2 class="mb-4">Selamat Datang di Portofolio Pribadi Saya.</h2>
                         <p class="mb-4"><a class="custom-btn btn custom-link" href="#section_2">Ayo kita mulai</a></p>
                     </div>
                 </div>
