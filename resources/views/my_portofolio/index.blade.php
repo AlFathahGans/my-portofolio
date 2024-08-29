@@ -576,7 +576,7 @@
 
                 <div class="col-lg-8 col-md-8 col-12 ms-auto">
                     <div class="section-title-wrap d-flex justify-content-center align-items-center mb-5">
-                        <img src="{{ asset('assets/images/handshake-man-woman-after-signing-business-contract-closeup.jpg') }}"
+                        <img src="{{ asset('assets/images/aerial-view-man-using-computer-laptop-wooden-table.jpg') }}"
                             class="avatar-image img-fluid" alt="">
 
                         <h2 class="text-white ms-4 mb-0">Sertifikat</h2>
