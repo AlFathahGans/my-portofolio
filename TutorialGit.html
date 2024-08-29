@@ -2,3 +2,31 @@
 2. Initial Respository
 3. Ketik inital commit and klik commit
 4. Push Brach
+5. Buka github -> Setting
+6. Secrets and Variables -> actions
+7. Buat secret username dan password dari ftp hosting
+8. Pindah ke Actions -> set up a workflow yourself
+9. Search ftp deploy by SamKirLand di marketplace dan buka view full marketplace listing lalu copy main.yml lalu paste di workflows
+10. Ubah server, username, password dan buat server-dir ::
+
+
+on: push
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ftpupload.net
+        username: ${{ secrets.ftp_username }}
+        password: ${{ secrets.ftp_password }}
+        server-dir: /htdocs
+
+
+11. Lalu commit changes
