@@ -11,7 +11,7 @@
                             <img src="{{ asset('assets/images/my-album/1.jpeg') }}"
                                 class="avatar-image avatar-image-large img-fluid" alt="">
 
-                            <h1 class="hero-title ms-3 mb-0">Hello friendss!</h1>
+                            <h1 class="hero-title ms-3 mb-0">Hello friends!</h1>
                         </div>
 
                         <h2 class="mb-4">Selamat Datang di Portofolio Saya.</h2>
