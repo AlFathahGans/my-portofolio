@@ -10,7 +10,11 @@
 10. Ubah server, username, password dan buat server-dir ::
 
 
-on: push
+on:
+  push:
+    branches:
+      - main  # Menentukan branch yang memicu workflow ini
+
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
@@ -26,7 +30,8 @@ jobs:
         server: ftpupload.net
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: /htdocs
+        server-dir: /htdocs/my-portofolio/
+
 
 
 11. Lalu commit changes
