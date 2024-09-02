@@ -407,7 +407,7 @@
                         </div>
 
                         <a href="{{ asset('assets/images/projects/direktif-sippa.png') }}" class="popup-image">
-                            <img src="{{ asset('assets/images/projects/directif-sippa.png') }}" class="projects-image img-fluid img-projects"
+                            <img src="{{ asset('assets/images/projects/direktif-sippa.png') }}" class="projects-image img-fluid img-projects"
                                 alt="">
                         </a>
                     </div>
