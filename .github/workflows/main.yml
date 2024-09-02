@@ -1,7 +1,5 @@
-on:
-  push:
-    branches:
-      - main  # Menentukan branch yang memicu workflow ini
+on:push
+branches: main  # Menentukan branch yang memicu workflow ini
 
 name: 🚀 Deploy website on push
 
